@@ -15,8 +15,22 @@ router.get('/list', function(req, res) {
   var sql = 'SELECT * FROM TEST_TABLE';
   conn.query(sql, function(err, rows, fields){
     if(err) console.log('query is not excuted. select fail\n' + err);
-    else res.render('list', {title: 'List', list: rows});
+    else res.render('./users/list', {title: 'List', list: rows});
   })
 
+  router.post('/addUser', function(req, res) {
+    var id = req.body.id;
+    var pw = req.body.pw;
+    var sql = 'INSERT INTO TEST_TABLE (USER_ID, USER_PW) VALUES (?, ?)';
+    var params = [id, pw];
+    conn.query(sql, params, function(err, result, fields){
+      if(err){
+        console.log(arr);
+        res.status(500).send('Internal Server Error');
+      }
+      console.log('Add User Complete')
+      res.redirect('./list');
+    })
+  })
 });
 module.exports = router;

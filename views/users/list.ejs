@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<style>
+    table{
+        text-align: center;  
+        border: 1px solid #444444;
+        border-collapse: collapse;
+    }
+    th, tr, td{
+        border: 1px solid #444444;
+        padding: 10px;
+    }
+    .modal{
+        position: fixed;   
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal_overlay{
+        position: absolute;
+        background-color: rgba(0,0,0,0.6);
+        width: 100%;
+        height: 100%;
+    }
+    .modal_content{
+        position: relative;
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px 40px;    
+        width: 250px;
+        top: 0;
+        text-align: center;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+    .hidden{
+        display: none;
+    }
+</style>
+
+<body>
+    <h1><%= title %> Page</h1>
+    <div style="margin-bottom: 5px;">
+        <button id="open">등록</button>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>No</th>
+                <th>아이디</th>
+                <th>비밀번호</th>
+                <th></th>
+            </tr>
+            <% for(var i=0;i<list.length;i++) {%>
+                <tr>
+                    <td><%=list[i].user_no%></td>
+                    <td><%=list[i].user_id%></td>         
+                    <td><%=list[i].user_pw%></td>  
+                    <td><button id="delete">삭제</button></td>
+                </tr>
+            <%}%>
+        </table>
+    </div>
+
+    <!-- modal -->
+    <div class="modal hidden">        
+        <div class="modal_overlay"></div>
+        <div class="modal_content">
+            <form id="form" method="post" action="./addUser">
+                <table style="border:0;">
+                    <tr>
+                        <th>ID</th>
+                        <td><input name="id" type="text"></td>                       
+                    </tr>
+                    <tr>
+                        <th>PW</th>
+                        <td><input name="pw" type="password"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="save">등록</button>
+                            <button id="close">취소</button>
+                        </td>
+                    </tr>
+                </table>                
+            </form>
+        </div>
+    </div>
+    <script>
+        const openBtn = document.getElementById("open");
+        const modal = document.querySelector(".modal");
+        const overlay = modal.querySelector(".modal_overlay");
+        const closeBtn = modal.querySelector("#close");
+        const openModal = () => {
+            modal.classList.remove("hidden");
+        }
+        const closeModal = () => {
+            modal.classList.add("hidden");
+        }
+        overlay.addEventListener("click", closeModal);
+        closeBtn.addEventListener("click", closeModal);
+        openBtn.addEventListener("click", openModal);
+
+        const saveBtn = document.getElementById("save");       
+        const addUser = () => {
+            var formData = document.getElementById("form");
+            $.ajax({
+                url: "./addUser",
+                type: "post",
+                data: formData,
+                async: false,
+                success: function(data){
+                    alert(data);
+                },
+                error: function(xhr, status){
+                    alert(xhr + " : " + status)
+                }
+            });
+        }
+        saveBtn.addEventListener("click", addUser)       
+    </script>
+    <!-- modal end -->
+</body>
+</html>
