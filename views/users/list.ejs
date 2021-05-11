@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <title><%=title%></title>
 </head>
 <style>
     table{
@@ -46,11 +46,12 @@
         display: none;
     }
 </style>
-
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+</script>
 <body>
-    <h1><%= title %> Page</h1>
+    <h1><%=title%> Page</h1>
     <div style="margin-bottom: 5px;">
-        <button id="open">등록</button>
+        <button id="addBtn">등록</button>
     </div>
     <div>
         <table>
@@ -65,59 +66,115 @@
                     <td><%=list[i].user_no%></td>
                     <td><%=list[i].user_id%></td>         
                     <td><%=list[i].user_pw%></td>  
-                    <td><button id="delete">삭제</button></td>
+                    <td>
+                        <button class="modBtn" value=<%=list[i].user_no%> onclick="openModModal(this.value)">수정</button>
+                        <button class="delBtn">삭제</button>
+                    </td>
                 </tr>
-            <%}%>
+            <%} %>
         </table>
     </div>
 
-    <!-- modal -->
+    <!-- modal div -->
     <div class="modal hidden">        
         <div class="modal_overlay"></div>
-        <div class="modal_content">
-            <form id="form" method="post" action="./addUser">
-                <table style="border:0;">
+        <div class="modal_content">         
+            <table style="border:0;">
+                <form id="form" method="post">
+                    <tr class="hidden">
+                        <td><input id="user_no" name="no" type="text" value=""></td>
+                    </tr>
                     <tr>
                         <th>ID</th>
-                        <td><input name="id" type="text"></td>                       
+                        <td><input id="user_id" name="id" type="text" value=""></td>                       
                     </tr>
                     <tr>
                         <th>PW</th>
-                        <td><input name="pw" type="password"></td>
-                    </tr>
+                        <td><input id="user_pw" name="pw" type="password" value=""></td>
+                    </tr>             
                     <tr>
                         <td colspan="2">
-                            <button id="save">등록</button>
+                            <button id="add" class="btn hidden">등록</button>      
+                            <button id="mod" class="btn hidden">수정</button>
+                </form> 
                             <button id="close">취소</button>
                         </td>
                     </tr>
-                </table>                
-            </form>
+            </table>                
         </div>
     </div>
-    <script>
-        const openBtn = document.getElementById("open");
+    <!-- modal div -->
+</body>
+<script>  
+    // modal start     
         const modal = document.querySelector(".modal");
         const overlay = modal.querySelector(".modal_overlay");
         const closeBtn = modal.querySelector("#close");
-        const openModal = () => {
+        const openModal = (btn, url) => {
             modal.classList.remove("hidden");
+            modal.querySelector(btn).classList.remove("hidden");
+            modal.querySelector("#form").action = url;
         }
         const closeModal = () => {
             modal.classList.add("hidden");
+            modal.querySelector("#form").action.remove;
+            const btnList = modal.querySelectorAll(".btn")
+            for(var i=0;i<btnList.length;i++){
+                btnList[i].classList.add("hidden");
+            }
         }
         overlay.addEventListener("click", closeModal);
         closeBtn.addEventListener("click", closeModal);
-        openBtn.addEventListener("click", openModal);
+    // modal end 
 
-        const saveBtn = document.getElementById("save");       
+    // add start   
+        const addBtn = document.getElementById("addBtn");
+        addBtn.addEventListener("click", function(){
+            openModal("#add", "./addUser");
+        });
+    
+        const addUserBtn = document.getElementById("add");  
         const addUser = () => {
             var formData = document.getElementById("form");
-            $.ajax({
+            $.ajax({              
                 url: "./addUser",
                 type: "post",
                 data: formData,
-                async: false,
+                success: function(data){
+                    alert(data);
+                },
+                error: function(xhr, status){
+                    alert(xhr + " : " + status)
+                }
+            });              
+        }
+        addUserBtn.addEventListener("click", addUser);
+    // add end
+    
+    // mod start
+        // let userList = new Array['<%=list.length%>'];
+        // for(var i=0;userList.length;i++){
+        //     userList[i] = JSON.stringify("<%=list[i]%>").toString;
+        // }
+        let userList = JSON.parse('<%- JSON.stringify(list) %>');
+        const openModModal = (userNo) => {
+            for(var i=0;i<userList.length;i++){
+                if(userList[i].user_no == userNo){
+                    modal.querySelector("#user_no").value = userList[i].user_no;
+                    modal.querySelector("#user_id").value = userList[i].user_id;
+                    modal.querySelector("#user_pw").value = userList[i].user_pw;
+                }
+            }
+            openModal("#mod", "./modUser");
+        }
+    
+        const modUserBtn = document.getElementById("mod");  
+        const modUser = () => {
+            var formData = document.getElementById("form");
+            $.ajax({
+                url: "./modUser",
+                type: "post",
+                data: formData,
                 success: function(data){
                     alert(data);
                 },
@@ -126,8 +183,10 @@
                 }
             });
         }
-        saveBtn.addEventListener("click", addUser)       
-    </script>
-    <!-- modal end -->
-</body>
+        modUserBtn.addEventListener("click", modUser)  
+    // mod end 
+    
+    // del start
+    // del end 
+</script>
 </html>

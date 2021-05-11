@@ -13,9 +13,12 @@ router.get('/', function(req, res, next) {
 
 router.get('/list', function(req, res) {
   var sql = 'SELECT * FROM TEST_TABLE';
+  var list;
   conn.query(sql, function(err, rows, fields){
     if(err) console.log('query is not excuted. select fail\n' + err);
-    else res.render('./users/list', {title: 'List', list: rows});
+    else {
+      res.render('./users/list', {title: 'List', list:rows});
+    } 
   })
 
   router.post('/addUser', function(req, res) {
@@ -29,6 +32,21 @@ router.get('/list', function(req, res) {
         res.status(500).send('Internal Server Error');
       }
       console.log('Add User Complete')
+      res.redirect('./list');
+    })
+  })
+
+  router.post('/modUser', function(req, res){
+    var id = req.body.id;
+    var pw = req.body.pw;
+    var sql = 'UPDATE TEST_TABLE SET () VALUES (?, ?) WHERE USER_ID = (?)';
+    var params = [id, pw, id];
+    conn.query(sql, params, function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }
+      console.log('Mod User Complete');
       res.redirect('./list');
     })
   })
