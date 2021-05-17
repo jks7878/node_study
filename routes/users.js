@@ -30,24 +30,42 @@ router.get('/list', function(req, res) {
       if(err){
         console.log(arr);
         res.status(500).send('Internal Server Error');
+      }else{
+        console.log('Add User Complete')
+        res.send({result:true, msg:'등록되었습니다'});
       }
-      console.log('Add User Complete')
-      res.redirect('./list');
     })
   })
 
   router.post('/modUser', function(req, res){
+    var no = req.body.no;
     var id = req.body.id;
     var pw = req.body.pw;
-    var sql = 'UPDATE TEST_TABLE SET () VALUES (?, ?) WHERE USER_ID = (?)';
-    var params = [id, pw, id];
+    var sql = 'UPDATE TEST_TABLE SET USER_ID = (?), USER_PW = (?) WHERE USER_NO = (?)';
+    var params = [id, pw, no];
     conn.query(sql, params, function(err, result, fields){
       if(err){
         console.log(err);
         res.status(500).send('Internal Server Error');
+      }else{
+        console.log('Mod User Complete');
+        res.send({result:true, msg:'수정되었습니다'});
       }
-      console.log('Mod User Complete');
-      res.redirect('./list');
+    })
+  })
+
+  router.post('/delUser', function(req, res){
+    var no = req.body.no;
+    var sql = 'DELETE FROM TEST_TABLE WHERE USER_NO = (?)';
+    var params = [no];
+    conn.query(sql, params, function(err, result, fields){
+      if(err){
+        console.log(err);
+        res.status(500).send('Internal Server Error');
+      }else{
+        console.log('Delete User Complete');
+        res.send({result:true, msg:'삭제되었습니다'});
+      }
     })
   })
 });

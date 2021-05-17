@@ -68,7 +68,7 @@
                     <td><%=list[i].user_pw%></td>  
                     <td>
                         <button class="modBtn" value=<%=list[i].user_no%> onclick="openModModal(this.value)">수정</button>
-                        <button class="delBtn">삭제</button>
+                        <button class="delBtn" value=<%=list[i].user_no%> onclick="delUser(this.value)">삭제</button>
                     </td>
                 </tr>
             <%} %>
@@ -91,12 +91,12 @@
                     <tr>
                         <th>PW</th>
                         <td><input id="user_pw" name="pw" type="password" value=""></td>
-                    </tr>             
-                    <tr>
+                    </tr>     
+                </form>                       
+                    <tr>              
                         <td colspan="2">
-                            <button id="add" class="btn hidden">등록</button>      
-                            <button id="mod" class="btn hidden">수정</button>
-                </form> 
+                            <input type="submit" id="add" class="btn hidden" value="등록" onclick="addUser()"/>
+                            <input type="submit" id="mod" class="btn hidden" value="수정" onclick="modUser()"/>
                             <button id="close">취소</button>
                         </td>
                     </tr>
@@ -133,29 +133,28 @@
             openModal("#add", "./addUser");
         });
     
-        const addUserBtn = document.getElementById("add");  
         const addUser = () => {
-            var formData = document.getElementById("form");
-            $.ajax({              
-                url: "./addUser",
-                type: "post",
-                data: formData,
-                success: function(data){
-                    alert(data);
-                },
-                error: function(xhr, status){
-                    alert(xhr + " : " + status)
-                }
-            });              
+            var formData = $("#form").serialize();
+            if(confirm("등록하시겠습니까?")){
+                $.ajax({
+                    url: "./addUser",
+                    type: "post",
+                    data: formData,
+                    success: function(result){
+                        window.location.href = "./list";
+                        alert(result["msg"]);
+                    },
+                    error: function(xhr, status){
+                        alert(xhr + " : " + status)
+                    }
+                });   
+            }else{
+                return;
+            }          
         }
-        addUserBtn.addEventListener("click", addUser);
     // add end
     
     // mod start
-        // let userList = new Array['<%=list.length%>'];
-        // for(var i=0;userList.length;i++){
-        //     userList[i] = JSON.stringify("<%=list[i]%>").toString;
-        // }
         let userList = JSON.parse('<%- JSON.stringify(list) %>');
         const openModModal = (userNo) => {
             for(var i=0;i<userList.length;i++){
@@ -168,25 +167,46 @@
             openModal("#mod", "./modUser");
         }
     
-        const modUserBtn = document.getElementById("mod");  
         const modUser = () => {
-            var formData = document.getElementById("form");
-            $.ajax({
-                url: "./modUser",
-                type: "post",
-                data: formData,
-                success: function(data){
-                    alert(data);
-                },
-                error: function(xhr, status){
-                    alert(xhr + " : " + status)
-                }
-            });
+            var formData = $("#form").serialize();
+            if(confirm("수정하시겠습니까?")){
+                $.ajax({
+                    url: "./modUser",
+                    type: "post",
+                    data: formData,
+                    success: function(result){
+                        window.location.href = "./list";
+                        alert(result["msg"]);
+                    },
+                    error: function(xhr, status){
+                        alert(xhr + " : " + status)
+                    }
+                });
+            }else{
+                return;
+            }
         }
-        modUserBtn.addEventListener("click", modUser)  
     // mod end 
     
     // del start
+        const delUser = (user_no) => {
+            if(confirm("삭제하시겠습니까?")){
+                $.ajax({
+                    url: "./delUser",
+                    type: "post",
+                    data: {"no" : user_no},
+                    success: function(result){
+                        window.location.href = "./list";
+                        alert(result["msg"]);
+                    },
+                    error: function(xhr, status){
+                        alert(xhr + " : " + status)
+                    }
+                });    
+            }else{
+                return;
+            }  
+        }
     // del end 
 </script>
 </html>
