@@ -8,16 +8,43 @@ db_config.connect(conn);
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-})
+  // Pagination Start
+  if(req.body.page != null || req.body.page != 0){
+    curPage = req.body.page;
+  }
+  var curPage = 1;
+  var maxPage;
+  var limit = 5;
+  var startNum;
+  var endNum;
 
-router.get('/list', function(res) {
-  var sql = 'SELECT * FROM TEST_TABLE';
-  var list;
+  var sql = 'SELECT COUNT(*) AS CNT FROM TEST_TABLE';
   conn.query(sql, function(err, rows, fields){
     if(err) console.log('query is not excuted. select fail\n' + err);
     else {
-      res.render('./users/list', {title: 'List', list:rows});
+      var cnt = rows[0].CNT;
+      console.log("count : " + cnt);
+      if(cnt != 0 && cnt <= 5){
+        maxPage = 1
+      }else if(cnt != 0 && cnt > 5){
+        maxPage = 1 + Math.floor(cnt/limit);
+      }
+    } 
+    console.log("max page : " + maxPage);
+
+    startNum = (curPage * limit) - limit + 1;
+    endNum = startNum + limit;
+    console.log("start : " + startNum);
+    console.log("end : " + endNum);
+  })
+  // Pagination End
+
+  sql = 'SELECT @ROWNUM:=@ROWNUM+1, A.* FROM TEST_TABLE A, (SELECT @ROWNUM:=0) B WHERE @ROWNUM+1 >= (?) and @ROWNUM+1 < (?)';
+  var params = [startNum, endNum];
+  conn.query(sql, params, function(err, rows, fields){
+    if(err) console.log('query is not excuted. select fail\n' + err);
+    else {
+      res.render('./users/list', {title: 'List', list:rows, curPage, maxPage});
     } 
   })
 })

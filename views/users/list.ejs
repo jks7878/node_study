@@ -49,6 +49,10 @@
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
 </script>
 <body>
+    <!-- <%
+        console.log(curPage);
+        console.log(maxPage);
+    %> -->
     <h1><%=title%> Page</h1>
     <div style="margin-bottom: 5px;">
         <button id="addBtn">등록</button>
@@ -107,106 +111,106 @@
 </body>
 <script>  
     // modal start     
-        const modal = document.querySelector(".modal");
-        const overlay = modal.querySelector(".modal_overlay");
-        const closeBtn = modal.querySelector("#close");
-        const openModal = (btn, url) => {
-            modal.classList.remove("hidden");
-            modal.querySelector(btn).classList.remove("hidden");
-            modal.querySelector("#form").action = url;
+    const modal = document.querySelector(".modal");
+    const overlay = modal.querySelector(".modal_overlay");
+    const closeBtn = modal.querySelector("#close");
+    const openModal = (btn, url) => {
+        modal.classList.remove("hidden");
+        modal.querySelector(btn).classList.remove("hidden");
+        modal.querySelector("#form").action = url;
+    }
+    const closeModal = () => {
+        modal.classList.add("hidden");
+        modal.querySelector("#form").action.remove;
+        const btnList = modal.querySelectorAll(".btn")
+        for(var i=0;i<btnList.length;i++){
+            btnList[i].classList.add("hidden");
         }
-        const closeModal = () => {
-            modal.classList.add("hidden");
-            modal.querySelector("#form").action.remove;
-            const btnList = modal.querySelectorAll(".btn")
-            for(var i=0;i<btnList.length;i++){
-                btnList[i].classList.add("hidden");
-            }
-        }
-        overlay.addEventListener("click", closeModal);
-        closeBtn.addEventListener("click", closeModal);
+    }
+    overlay.addEventListener("click", closeModal);
+    closeBtn.addEventListener("click", closeModal);
     // modal end 
 
     // add start   
-        const addBtn = document.getElementById("addBtn");
-        addBtn.addEventListener("click", function(){
-            openModal("#add", "./addUser");
-        });
-    
-        const addUser = () => {
-            var formData = $("#form").serialize();
-            if(confirm("등록하시겠습니까?")){
-                $.ajax({
-                    url: "./addUser",
-                    type: "post",
-                    data: formData,
-                    success: function(result){
-                        window.location.href = "./list";
-                        alert(result["msg"]);
-                    },
-                    error: function(xhr, status){
-                        alert(xhr + " : " + status)
-                    }
-                });   
-            }else{
-                return;
-            }          
-        }
+    const addBtn = document.getElementById("addBtn");
+    addBtn.addEventListener("click", function(){
+        openModal("#add", "./addUser");
+    });
+
+    const addUser = () => {
+        var formData = $("#form").serialize();
+        if(confirm("등록하시겠습니까?")){
+            $.ajax({
+                url: "./addUser",
+                type: "post",
+                data: formData,
+                success: function(result){
+                    window.location.href = "./list";
+                    alert(result["msg"]);
+                },
+                error: function(xhr, status){
+                    alert(xhr + " : " + status)
+                }
+            });   
+        }else{
+            return;
+        }          
+    }
     // add end
     
     // mod start
-        let userList = JSON.parse('<%- JSON.stringify(list) %>');
-        const openModModal = (userNo) => {
-            for(var i=0;i<userList.length;i++){
-                if(userList[i].user_no == userNo){
-                    modal.querySelector("#user_no").value = userList[i].user_no;
-                    modal.querySelector("#user_id").value = userList[i].user_id;
-                    modal.querySelector("#user_pw").value = userList[i].user_pw;
+    let userList = JSON.parse('<%- JSON.stringify(list) %>');
+    const openModModal = (userNo) => {
+        for(var i=0;i<userList.length;i++){
+            if(userList[i].user_no == userNo){
+                modal.querySelector("#user_no").value = userList[i].user_no;
+                modal.querySelector("#user_id").value = userList[i].user_id;
+                modal.querySelector("#user_pw").value = userList[i].user_pw;
+            }
+        }
+        openModal("#mod", "./modUser");
+    }
+
+    const modUser = () => {
+        var formData = $("#form").serialize();
+        if(confirm("수정하시겠습니까?")){
+            $.ajax({
+                url: "./modUser",
+                type: "post",
+                data: formData,
+                success: function(result){
+                    window.location.href = "./list";
+                    alert(result["msg"]);
+                },
+                error: function(xhr, status){
+                    alert(xhr + " : " + status)
                 }
-            }
-            openModal("#mod", "./modUser");
+            });
+        }else{
+            return;
         }
-    
-        const modUser = () => {
-            var formData = $("#form").serialize();
-            if(confirm("수정하시겠습니까?")){
-                $.ajax({
-                    url: "./modUser",
-                    type: "post",
-                    data: formData,
-                    success: function(result){
-                        window.location.href = "./list";
-                        alert(result["msg"]);
-                    },
-                    error: function(xhr, status){
-                        alert(xhr + " : " + status)
-                    }
-                });
-            }else{
-                return;
-            }
-        }
+    }
     // mod end 
     
     // del start
-        const delUser = (user_no) => {
-            if(confirm("삭제하시겠습니까?")){
-                $.ajax({
-                    url: "./delUser",
-                    type: "post",
-                    data: {"no" : user_no},
-                    success: function(result){
-                        window.location.href = "./list";
-                        alert(result["msg"]);
-                    },
-                    error: function(xhr, status){
-                        alert(xhr + " : " + status)
-                    }
-                });    
-            }else{
-                return;
-            }  
-        }
+    const delUser = (user_no) => {
+        if(confirm("삭제하시겠습니까?")){
+            $.ajax({
+                url: "./delUser",
+                type: "post",
+                data: {"no" : user_no},
+                success: function(result){
+                    window.location.href = "./list";
+                    alert(result["msg"]);
+                },
+                error: function(xhr, status){
+                    alert(xhr + " : " + status)
+                }
+            });    
+        }else{
+            return;
+        }  
+    }
     // del end 
 </script>
 </html>
