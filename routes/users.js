@@ -12,10 +12,13 @@ router.get('/', function(req, res, next) {
   var curPage = 1;
   var maxPage;
   var limit = 5;
-  if(req.query.page != null || req.query.page != 0){
+  console.log("query page : " + req.query.page);
+  if(req.query.page == null){
+    curPage = 1;
+  }else{
     curPage = req.query.page;
   }
-  console.log(curPage);
+  console.log("curPage : " + curPage);
   var startNum;
   var endNum;
 

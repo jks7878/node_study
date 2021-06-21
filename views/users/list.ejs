@@ -82,7 +82,7 @@
                     [<<]
                 </a>
             <%}else {%>
-                <a href="./users?page=<%= curPage - 1 %>">
+                <a href="/users?page=<%= curPage - 1 %>">
                     [<<]
                 </a>
             <%} %>
@@ -93,7 +93,7 @@
                     [<%= i+1 %>]
                 </a>
                 <%}else {%>
-                <a href="./users?page=<%= i + 1 %>">
+                <a href="/users?page=<%= i + 1 %>">
                     [<%= i+1 %>]
                 </a>
                 <%} 
@@ -104,7 +104,7 @@
                     [>>]
                 </a>
             <%}else {%>
-                <a href="./users?page=<%= curPage + 1 %>">
+                <a href="/users?page=<%= curPage + 1 %>">
                     [>>]
                 </a>
             <%} %>
@@ -175,11 +175,11 @@
         var formData = $("#form").serialize();
         if(confirm("등록하시겠습니까?")){
             $.ajax({
-                url: "./addUser",
+                url: "/users/addUser",
                 type: "post",
                 data: formData,
                 success: function(result){
-                    window.location.href = "./list";
+                    window.location.href = "/users";
                     alert(result["msg"]);
                 },
                 error: function(xhr, status){

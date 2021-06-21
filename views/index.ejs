@@ -7,5 +7,15 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+
+    <form action="./" method="post">
+      <input type="text" id="favorite" name="favorite" placeholder="좋아하는 맛">
+      <input type="submit">
+    </form>
+    <% if(favorite) {%>
+      <%= favorite %>
+    <%} else { %>
+      Not Cookie
+    <%} %>
   </body>
 </html>

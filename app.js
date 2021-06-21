@@ -1,3 +1,4 @@
+var debug = require('debug')('app4');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -6,7 +7,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+var cookieRouter = require('./routes/cookie');
 var app = express();
 
 // view engine setup
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// app.user('/cookie', cookieRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -38,4 +40,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+// module.exports = app;
+app.set('port', process.env.port || 3000);
+var server = app.listen(app.get('port'), function(){
+  debug('Express server listening on port ' + server.address().port);
+});
