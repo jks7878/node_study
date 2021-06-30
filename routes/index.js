@@ -9,18 +9,11 @@ app.use(cookieParser());
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log(req.session);
-  if(req && req.session && req.session.count) {
-    console.log(req.session.count);
-    res.render('index', { 
-      title: 'Express', 
-      favorite: req.cookies.favorite,
-      count: req.session.count
-    });
-  }else{
-    req.session.count = 1;
-    res.redirect('/');
-  }
+  res.render('index', { 
+    title: 'Express', 
+    favorite: req.cookies.favorite,
+    count: req.session.count
+  });
 });
 
 // cookie
@@ -33,4 +26,13 @@ router.post('/cookie', function(req, res, next) {
   res.redirect('/');
 });
 
+// session
+router.post('/session', function(req, res, next) {
+  if(req && req.session && req.session.count) {
+    req.session.count += 1;
+  }else{
+    req.session.count = 1;
+  }
+  res.redirect('/');
+});
 module.exports = router;
