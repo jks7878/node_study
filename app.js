@@ -1,15 +1,23 @@
-var debug = require('debug')('app4');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const debug = require('debug')('app4');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+// Layout
+const expressLayouts = require('express-ejs-layouts');
+// cookie
+const cookieParser = require('cookie-parser');
+// Session
+const session = require('express-session');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var app = express();
+// router setting
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const chatRouter = require('./routes/chat');
 
-var session = require('express-session');
+const app = express();
+
 app.use(session({
   secret: "asdf",
   resave: false,
@@ -25,10 +33,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// express-ejs-layouts setting 
+app.use(expressLayouts);
+app.set('layout', 'layout');
+app.set("layout extractScripts", true);
 
-// router setting
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/chat', chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -48,6 +60,6 @@ app.use(function(err, req, res, next) {
 
 // module.exports = app;
 app.set('port', process.env.port || 3000);
-var server = app.listen(app.get('port'), function(){
+const server = app.listen(app.get('port'), function(){
   debug('Express server listening on port ' + server.address().port);
 });

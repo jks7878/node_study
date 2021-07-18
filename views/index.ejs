@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body>
+  <body> -->
+  <%- contentFor('body') %>
+  <div>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
 
@@ -27,5 +29,17 @@
     <%} else { %>
       Not Session
     <%} %>
-  </body>
-</html>
+    <br>
+    <br>
+    <% if(logined) {%>
+      현재 로그인 중인 유저 :  <%= logined %>
+    <%} else { %>
+      <form action="./login" method="post">
+        <input type="text" id="userId" name="id" placeholder="ID"><br>
+        <input type="password" id="userPw" name="pw" placeholder="PW"><br>
+        <input type="submit" value="로그인">
+      </form>
+    <%} %>
+  </div>
+<!--  </body>
+  </html> -->

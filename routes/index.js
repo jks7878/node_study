@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 const app = require('express')();
 const bodyParser = require('body-parser');
@@ -12,7 +12,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { 
     title: 'Express', 
     favorite: req.cookies.favorite,
-    count: req.session.count
+    count: req.session.count,
+    logined : req.session.logined
   });
 });
 
@@ -35,4 +36,5 @@ router.post('/session', function(req, res, next) {
   }
   res.redirect('/');
 });
+
 module.exports = router;
