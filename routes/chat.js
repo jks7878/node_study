@@ -6,9 +6,11 @@ const express = require('express');
 // 프로젝트 라우터
 var router = express.Router();
 
-// router.get('/', function(req, res, next){
-
-// });
+router.get('/', function(req, res, next){
+    res.render('./chat/chat', {
+        title:'Chat'
+    })
+});
 
 module.exports = router;
 

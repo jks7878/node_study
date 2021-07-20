@@ -1,30 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
-</head>
-<body>
+<%- contentFor('body') %>
+<style>
+    .chatArea {
+    }
+    .input {
+        float: left;
+        margin: 0;
+        padding: 0;
+    }
+    .sendBtn {
+        float: left;
+        margin-left: 5px;
+        padding: 0;
+        width: 90px;
+        height: 90px;
+    }
+</style>
+
+<div class="chatArea">    
+    <h1><%= title %></h1>
     <div>
-        <div>
-            <textarea name="output" id="output" cols="30" rows="10">
-
-            </textarea>
-        </div>
-        <div>
-            <form action="">
-                <textarea name="input" id="input" cols="30" rows="10">
-
-                </textarea>
-            </form>
-        </div>
+        <textarea name="output" id="output" class="output" cols="60" rows="20"></textarea>
     </div>
-    <script>
-        const sendChat = () =>{
-            
-        }
-    </script>
-</body>
-</html>
+    <div>
+        <form action="">
+            <textarea name="input" id="input" class="input" cols="47" rows="6"></textarea>
+            <input type="button" name="sendBtn" id="sendBtn" class="sendBtn" value="전송"/>
+        </form>
+    </div>
+</div>
+<script>
+    const sendChat = () =>{
+        
+    }
+</script>
