@@ -1,7 +1,5 @@
 <%- contentFor('body') %>
 <style>
-    .chatArea {
-    }
     .input {
         float: left;
         margin: 0;
@@ -15,21 +13,24 @@
         height: 90px;
     }
 </style>
-
 <div class="chatArea">    
     <h1><%= title %></h1>
     <div>
-        <textarea name="output" id="output" class="output" cols="60" rows="20"></textarea>
+        <textarea name="output" id="output" class="output" cols="60" rows="20" readonly></textarea>
     </div>
     <div>
-        <form action="">
+        <form id="form" method="post">
             <textarea name="input" id="input" class="input" cols="47" rows="6"></textarea>
-            <input type="button" name="sendBtn" id="sendBtn" class="sendBtn" value="전송"/>
         </form>
+        <input type="submit" name="sendBtn" id="sendBtn" class="sendBtn" value="전송"/>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+</script>
 <script>
-    const sendChat = () =>{
-        
-    }
+    const sendBtn = document.getElementById("sendBtn");
+    sendBtn.addEventListener('click', function() {
+        const chat = document.getElementById("input");
+        console.log(chat.value);
+    });
 </script>

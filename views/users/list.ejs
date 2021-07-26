@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%=title%></title>
-</head>
+<%- contentFor('body') %>
 <style>
     table{
         text-align: center;  
@@ -48,101 +41,99 @@
 </style>
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
 </script>
-<body>
-    <h1><%=title%> Page</h1>
-    <div style="margin-bottom: 5px;">
-        <button id="addBtn">등록</button>
-    </div>
-    <div>
-        <table>
+<h1><%=title%> Page</h1>
+<div style="margin-bottom: 5px;">
+    <button id="addBtn">등록</button>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>No</th>
+            <th>아이디</th>
+            <th>비밀번호</th>
+            <th></th>
+        </tr>
+        <% for(var i=0;i<list.length;i++) {%>
             <tr>
-                <th>No</th>
-                <th>아이디</th>
-                <th>비밀번호</th>
-                <th></th>
+                <td><%=list[i].user_no%></td>
+                <td><%=list[i].user_id%></td>         
+                <td><%=list[i].user_pw%></td>  
+                <td>
+                    <button class="modBtn" value=<%=list[i].user_no%> onclick="openModModal(this.value)">수정</button>
+                    <button class="delBtn" value=<%=list[i].user_no%> onclick="delUser(this.value)">삭제</button>
+                </td>
             </tr>
-            <% for(var i=0;i<list.length;i++) {%>
+        <%} %>
+    </table>
+
+    <!-- pagination div -->
+    <div>
+        <tr>
+        <% if(curPage == 1) {%>
+            <a>
+                [<<]
+            </a>
+        <%}else {%>
+            <a href="/users?page=<%= curPage - 1 %>">
+                [<<]
+            </a>
+        <%} %>
+
+        <% for(var i=0;i<maxPage;i++) {
+            if(i + 1 == curPage) {%>
+            <a>
+                [<%= i+1 %>]
+            </a>
+            <%}else {%>
+            <a href="/users?page=<%= i + 1 %>">
+                [<%= i+1 %>]
+            </a>
+            <%} 
+        } %>
+
+        <% if(curPage == maxPage) {%>
+            <a>
+                [>>]
+            </a>
+        <%}else {%>
+            <a href="/users?page=<%= curPage + 1 %>">
+                [>>]
+            </a>
+        <%} %>
+        </tr>
+    </div>
+    <!-- pagination div -->
+</div>
+
+<!-- modal div -->
+<div class="modal hidden">        
+    <div class="modal_overlay"></div>
+    <div class="modal_content">         
+        <table style="border:0;">
+            <form id="form" method="post">
+                <tr class="hidden">
+                    <td><input id="user_no" name="no" type="text" value=""></td>
+                </tr>
                 <tr>
-                    <td><%=list[i].user_no%></td>
-                    <td><%=list[i].user_id%></td>         
-                    <td><%=list[i].user_pw%></td>  
-                    <td>
-                        <button class="modBtn" value=<%=list[i].user_no%> onclick="openModModal(this.value)">수정</button>
-                        <button class="delBtn" value=<%=list[i].user_no%> onclick="delUser(this.value)">삭제</button>
+                    <th>ID</th>
+                    <td><input id="user_id" name="id" type="text" value=""></td>                       
+                </tr>
+                <tr>
+                    <th>PW</th>
+                    <td><input id="user_pw" name="pw" type="password" value=""></td>
+                </tr>     
+            </form>                       
+                <tr>              
+                    <td colspan="2">
+                        <input type="submit" id="add" class="btn hidden" value="등록" onclick="addUser()"/>
+                        <input type="submit" id="mod" class="btn hidden" value="수정" onclick="modUser()"/>
+                        <button id="close">취소</button>
                     </td>
                 </tr>
-            <%} %>
-        </table>
-
-        <!-- pagination div -->
-        <div>
-            <tr>
-            <% if(curPage == 1) {%>
-                <a>
-                    [<<]
-                </a>
-            <%}else {%>
-                <a href="/users?page=<%= curPage - 1 %>">
-                    [<<]
-                </a>
-            <%} %>
-
-            <% for(var i=0;i<maxPage;i++) {
-                if(i + 1 == curPage) {%>
-                <a>
-                    [<%= i+1 %>]
-                </a>
-                <%}else {%>
-                <a href="/users?page=<%= i + 1 %>">
-                    [<%= i+1 %>]
-                </a>
-                <%} 
-            } %>
-
-            <% if(curPage == maxPage) {%>
-                <a>
-                    [>>]
-                </a>
-            <%}else {%>
-                <a href="/users?page=<%= curPage + 1 %>">
-                    [>>]
-                </a>
-            <%} %>
-            </tr>
-        </div>
-        <!-- pagination div -->
+        </table>                
     </div>
-
-    <!-- modal div -->
-    <div class="modal hidden">        
-        <div class="modal_overlay"></div>
-        <div class="modal_content">         
-            <table style="border:0;">
-                <form id="form" method="post">
-                    <tr class="hidden">
-                        <td><input id="user_no" name="no" type="text" value=""></td>
-                    </tr>
-                    <tr>
-                        <th>ID</th>
-                        <td><input id="user_id" name="id" type="text" value=""></td>                       
-                    </tr>
-                    <tr>
-                        <th>PW</th>
-                        <td><input id="user_pw" name="pw" type="password" value=""></td>
-                    </tr>     
-                </form>                       
-                    <tr>              
-                        <td colspan="2">
-                            <input type="submit" id="add" class="btn hidden" value="등록" onclick="addUser()"/>
-                            <input type="submit" id="mod" class="btn hidden" value="수정" onclick="modUser()"/>
-                            <button id="close">취소</button>
-                        </td>
-                    </tr>
-            </table>                
-        </div>
-    </div>
-    <!-- modal div -->
-</body>
+</div>
+<!-- modal div -->
 <script>  
     // modal start     
     const modal = document.querySelector(".modal");
@@ -247,4 +238,3 @@
     }
     // del end 
 </script>
-</html>

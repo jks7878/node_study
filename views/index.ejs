@@ -1,45 +1,35 @@
-<!-- <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body> -->
-  <%- contentFor('body') %>
-  <div>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-
-    <form action="./cookie" method="post">
-      <input type="text" id="favorite" name="favorite" placeholder="좋아하는 맛">
-      <input type="submit">
+<%- contentFor('body') %>
+<div>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+  <form action="./cookie" method="post">
+    <input type="text" id="favorite" name="favorite" placeholder="좋아하는 맛">
+    <input type="submit">
+  </form>
+  <% if(favorite) {%>
+    <%= favorite %>
+  <%} else { %>
+    Not Cookie
+  <%} %>
+  <br>
+  <br>
+  <form action="./session" method="post">
+    <input type="submit" value="세션체크">
+  </form>
+  <% if(count) {%>
+    <%= count %>
+  <%} else { %>
+    Not Session
+  <%} %>
+  <br>
+  <br>
+  <% if(logined) {%>
+    현재 로그인 중인 유저 :  <%= logined %>
+  <%} else { %>
+    <form action="./login" method="post">
+      <input type="text" id="userId" name="id" placeholder="ID"><br>
+      <input type="password" id="userPw" name="pw" placeholder="PW"><br>
+      <input type="submit" value="로그인">
     </form>
-    <% if(favorite) {%>
-      <%= favorite %>
-    <%} else { %>
-      Not Cookie
-    <%} %>
-    <br>
-    <br>
-    <form action="./session" method="post">
-      <input type="submit" value="세션체크">
-    </form>
-    <% if(count) {%>
-      <%= count %>
-    <%} else { %>
-      Not Session
-    <%} %>
-    <br>
-    <br>
-    <% if(logined) {%>
-      현재 로그인 중인 유저 :  <%= logined %>
-    <%} else { %>
-      <form action="./login" method="post">
-        <input type="text" id="userId" name="id" placeholder="ID"><br>
-        <input type="password" id="userPw" name="pw" placeholder="PW"><br>
-        <input type="submit" value="로그인">
-      </form>
-    <%} %>
-  </div>
-<!--  </body>
-  </html> -->
+  <%} %>
+</div>

@@ -33,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 // express-ejs-layouts setting 
 app.use(expressLayouts);
 app.set('layout', 'layout');
